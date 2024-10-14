@@ -1,0 +1,32 @@
+﻿@model User
+
+<div class="container mx-auto my-20 2xl:w-2/6 xl: lg:w-2/5 md:w-2/3 px-10">
+
+    <h1 class="text-4xl mb-10 font-bold">Edit your information</h1>
+    <form asp-action="Edit" method="post" class="space-y-4">
+        <input asp-for="@Model.Id" type="hidden"/>
+        <div>
+            <label class="block tracking-wide text-grey-darker text-lg font-bold mb-2" for="grid-state">
+                Email
+            </label>
+            <input asp-for="@Model.Email" value="@Model.Email" class="w-full rounded-lg border-gray-100 border-2 p-3 text-sm" type="text" id="title"/>
+        </div>
+
+        @* <div> *@
+        @*     <label class="block tracking-wide text-grey-darker text-lg font-bold mb-2" for="grid-state"> *@
+        @*         Password *@
+        @*     </label> *@
+        @*     <input class="w-full rounded-lg border-gray-100 border-2 p-3 text-sm" type="text" id="title"/> *@
+        @* </div> *@
+
+        <div>
+            <div class="flex w-full mt-14">
+                <input
+                    id="submit-button"
+                    type="submit"
+                    class="w-full bg-gray-200 text-gray-600 hover:text-white hover:bg-pink-300 text-lg py-2 px-4 font-black rounded-xl focus:outline-none focus:shadow-outline h-16"
+                    value="SAVE CHANGES">
+            </div>
+        </div>
+    </form>
+</div>

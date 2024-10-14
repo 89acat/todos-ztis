@@ -1,0 +1,119 @@
+﻿@model Note
+
+<div class="container mx-auto my-10 px-10 px-10 text-gray-700">
+
+    <div class="flex flex-col-2 justify-between">
+        <div class="container w-auto h-auto">
+            <h1 class="text-4xl mb-10 font-bold">Note details</h1>
+        </div>
+        <div class="container w-auto h-auto">
+            <a href="/notes/edit?id=@Model.Id">
+                <svg class="h-8 w-8 hover:text-pink-300" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z"/> <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3"/> <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3"/> <line x1="16" y1="5" x2="19" y2="8"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 grid-cols-1 md:gap-8">
+
+        @* Left *@
+        <div class="sm:col-span-2">
+
+            <div class="w-full bg-white shadow-lg rounded-xl p-6 mb-6">
+                <div class="flex-shrink-0">
+                </div>
+                <div class="my-2">
+                    <div class="flex justify-between pb-6">
+                        <div class="text-2xl font-black text-gray-700">Note card</div>
+                        <div class="text-lg italic text-gray-400">@Model.CreatedOn.Date.Date.ToString("dd.MM.yyyy")</div>
+                    </div>
+                    <div class="text-lg text-black text-gray-700 pb-4">
+                        <b>Title: </b>@Model.Title
+                    </div>
+                    <div class="text-xl text-black text-gray-700 pb-2">
+                        <b>Description: </b>
+                    </div>
+                    <p class="text-gray-700 text-lg pb-4">@Model.Description</p>
+                    <div class="text-lg text-black text-gray-700 pb-4">
+                        <b>Category: </b>@Model.NoteType.Name
+                    </div>
+                    <div class="text-lg text-black text-gray-700 pb-4">
+                        <b>Status: </b>@Model.NoteStatus.Name
+                    </div>
+                    @* If ModifiedOn is null, don't show this *@
+                    <div class="text-lg @Model.IsHidden text-black text-gray-700">
+                        <b>Modified on: </b>@Model.ModifiedOn?.Date.Date.ToString("dd.MM.yyyy")
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full bg-white shadow-lg rounded-xl px-2 py-4 mb-5">
+                <p class="p-4 font-bold text-gray-900 text-2xl">
+                    My tasks
+                </p>
+                @foreach (var item in Model.Items)
+                {
+                    <ul>
+                        <li class="flex items-center justify-between py-3 text-gray-700 border-b-2 border-gray-100">
+                            <div class="flex items-center justify-start text-lg mx-4">
+                                <span class="@item.TitleCompleted">
+                                    @item.Description
+                                </span>
+                            </div>
+                            <svg width="20" height="20" fill="currentColor" class="mx-4 @item.CheckCompleted" viewBox="0 0 1024 1024">
+                                <path d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0 0 51.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z" fill="currentColor">
+                                </path>
+                                <path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448s448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372s372 166.6 372 372s-166.6 372-372 372z" fill="currentColor">
+                                </path>
+                            </svg>
+                        </li>
+                    </ul>
+                }
+            </div>
+
+        </div>
+
+        @* Right *@
+        <div class="container relative p-6 overflow-hidden text-gray-900 bg-white shadow-lg rounded-xl w-full md:h-1/2 sm:h-auto">
+            <div class="my-2">
+                <p class="mb-6 text-2xl font-bold text-gray-700">
+                    Task progress
+                </p>
+                <div class="text-lg text-black text-gray-700 pb-4">
+                    <b>Number of tasks: </b>@Model.AllItems
+                </div>
+
+                <div class="flex items-center justify-between text-base text-gray-700">
+                    <p>
+                        Finished
+                    </p>
+                    <p>
+                        @Model.FinishedItems/@Model.AllItems
+                    </p>
+                </div>
+                <div class="w-full h-2 mb-4 bg-gray-100 rounded-full">
+                    @* If it's odd, use w-x/5, otherwise w-x/6?
+                    if it's <= maxNum use exactly number of tasks
+                    if it's all completed use w-full
+                    6 isn't maxNum, check them here: https://tailwindcss.com/docs/width *@
+                    <div class="w-@Model.FinishedItems/@Model.AllItems h-full text-xs text-center text-white bg-emerald-400 rounded-full">
+                    </div>
+                </div>
+                <div class="flex items-center justify-between text-base text-gray-700 mt-5">
+                    <p>
+                        Left
+                    </p>
+                    <p>
+                        @Model.UnfinishedItems/@Model.AllItems
+                    </p>
+                </div>
+                <div class="w-full h-2 bg-gray-100 rounded-full">
+                    <div class="w-@Model.UnfinishedItems/@Model.AllItems h-full text-xs text-center text-white bg-red-400 rounded-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

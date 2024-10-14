@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - Todos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/datepicker.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                'nunito': ['nunito', 'sans-serif']
+              },
+            },
+          }
+        }
+      </script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap" rel="stylesheet">
+</head>
+
+<body class="font-nunito select-none">
+
+@if (User.Identity.IsAuthenticated)
+{
+    <header class="bg-white bg-opacity-5 shadow-lg shadow-gray-100 hidden md:block">
+        <nav class="flex flex-col font-bold text-center sm:flex-row sm:text-left lg:text-lg sm:justify-between py-4 px-6 bg-white sm:items-baseline w-full">
+            <div class="mb-2 sm:mb-0">
+                <a href="/home" class="text-lg text-gray-500 hover:text-black no-underline ml-2">To do</a>
+                <a href="/profile/show" class="text-lg text-gray-500 hover:text-black hover: no-underline ml-8">Profile</a>
+            </div>
+            <div>
+                <a href="/Identity/Account/Logout" class="text-lg text-gray-500 hover:text-pink-300 no-underline ml-2">Log out</a>
+            </div>
+        </nav>
+    </header>
+}
+
+
+<div class="shadow-lg shadow-gray-100 py-6">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<div class="border-top py-6">
+    <div class="text-center my-14">
+        &copy; 2023 - To-do app
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", false)
+
+</body>
+</html>

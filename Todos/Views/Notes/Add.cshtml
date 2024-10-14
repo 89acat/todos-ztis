@@ -1,0 +1,151 @@
+﻿@using Todos.Common.Enums
+@model Note
+
+<div class="container mx-auto px-10 mt-10">
+    <h1 class="text-4xl mb-10 font-bold">Add new note</h1>
+
+    <form asp-action="Add" method="post" class="space-y-4">
+        <div>
+            <label class="block tracking-wide text-grey-darker text-lg font-bold mb-2" for="grid-state">
+                Title
+            </label>
+            <input asp-for="@Model.Title" class="w-full rounded-lg border-gray-100 border-2 p-3 text-lg" type="textNote 1" id="title"/>
+        </div>
+
+        <div>
+            <label class="block tracking-wide text-grey-darker text-lg font-bold mb-2" for="grid-state">
+                Description
+            </label>
+            <textarea asp-for="@Model.Description" class="w-full rounded-lg border-gray-100 border-2 p-3 text-lg" rows="8" id="description"> </textarea>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+                <label class="block tracking-wide text-grey-darker text-lg font-bold mb-2" for="grid-state">
+                    Category
+                </label>
+                @* Form *@
+                <select asp-for="NoteType.Id" class="w-full rounded-lg border-gray-100 border-2 p-3 text-lg">
+                    ">
+                    @foreach (NoteType type in Enum.GetValues(typeof(NoteType)))
+                    {
+                        if (Model?.NoteType?.Name == type.ToString())
+                        {
+                            <option checked>@type</option>
+                        }
+                        else
+                        {
+                            <option>@type</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        @Html.HiddenFor(m => m.NoteStatus.Id, new { Value = NoteStatus.New.ToString() })
+
+        @* Add items *@
+        <h1 class="text-3xl font-bold pt-12 pb-5">Now add tasks for note you created</h1>
+
+        <div class="grid grid-cols-1 gap-4 pb-4 text-center sm:grid-cols-10">
+            <div class="col-span-9">
+                <label class="block text-start tracking-wide text-grey-darker text-lg font-bold mb-2" for="grid-state">
+                    Name
+                </label>
+                <input class="w-full rounded-lg border-gray-100 border-2 p-3 text-lg" type="text" id="note-name"/>
+            </div>
+            <div class="flex w-full mt-9">
+                <button
+                    id="add-task"
+                    class="w-full bg-gray-100 text-gray-600 font-black hover:text-white hover:bg-gray-700 text-lg py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-14"
+                    type="button">
+                    Add
+                </button>
+            </div>
+        </div>
+
+        <div class="flex flex-col">
+            <div class="-m-1.5 overflow-x-auto">
+                <div class="p-1.5 min-w-full inline-block align-middle">
+                    <div class="border border-2 border-gray-100 rounded-lg overflow-hidden">
+                        <table class="min-w-full w-fit divide-y divide-gray-100 divide-y-2">
+                            <thead class="bg-white">
+                            <tr class=" bg-gray-100 text-gray-700">
+                                <th scope="col" class="py-3 pl-7 pr-0 mr-0 text-left text-lg font-bold">Completed</th>
+                                <th scope="col" colspan="3" class="py-3 text-left text-lg font-bold">Name</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"></th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"></th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="items" class="divide-y divide-gray-100 divide-y-2">
+                            @for (var i = 0; i < Model.Items.Count; i++)
+                            {
+                                var item = Model.Items[i];
+                                @Html.Partial("_ListItem", item)
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-6 pb-14">
+            <div class="flex w-full mt-8">
+                <input
+                    id="submit-button"
+                    type="submit"
+                    class="w-full bg-gray-200 text-gray-600 hover:text-white hover:bg-pink-300 text-lg py-2 px-4 font-black rounded-xl focus:outline-none focus:shadow-outline h-16"
+                    value="SAVE CHANGES "/>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", () => {    
+      $("#add-task").on("click", function() {
+        $.ajax({
+            type: "POST",
+            url: "RenderItem",
+            data: { 
+                description: $("#note-name").val(),
+            },
+            dataType: "html",
+            success: function (result) {
+                $("#items").append(result);
+                $("#note-name").val("");
+            },
+            failure: function() {
+                alert("Failed");
+            }
+        });
+      });
+      
+      $("#submit-button").on("click", function(event) {
+          event.preventDefault();
+          let index = 0;
+
+          $("tbody > tr").each(function () {
+              console.log(index);
+
+              $(this).find(".item-input").each(function() {
+                  var name = $(this).attr("name");
+                  var newName = name.replace("[]", "[" + index + "]");
+                  $(this).attr("name", newName);                  
+              });
+
+              index++;
+          });
+          
+          $("form").submit();
+      });
+      
+      $(document).on("click", ".remove-task", function(event) {
+          event.preventDefault();
+          let tr = $(this).closest("tr");
+          tr.remove();
+      });
+});
+</script>

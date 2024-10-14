@@ -1,0 +1,32 @@
+﻿@page
+@model Todos.Areas.Identity.Pages.Account.LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+<body class="flex items-center justify-center h-screen">
+<div class="container mx-auto my-56 p-10 w-full md:w-2/3 lg:w-2/5 2xl:w-2/6 bg-white shadow-xl rounded-lg">
+    <h1 class="text-4xl mb-10 font-bold text-gray-800">Log out</h1>
+    @{
+        if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <p>Are you sure you want to log out?</p>
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="flex mt-9">
+                        <button
+                            class="w-full bg-gray-100 text-gray-600 font-black hover:text-white hover:bg-pink-300 text-lg py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline h-14"
+                            type="submit">
+                            Yes, log me out
+                        </button>
+                    </div>
+                </div>
+            </form>
+        }
+        else
+        {
+            <p>You have successfully logged out of the application.</p>
+        }
+    }
+</div>
+</body>

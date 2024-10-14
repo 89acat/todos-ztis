@@ -1,0 +1,55 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="flex items-center h-auto">
+    <div class="container mx-auto my-40 p-10 w-full md:w-2/3 lg:w-2/5 2xl:w-2/6 bg-white shadow-xl rounded-lg">
+        <h1 class="text-4xl mb-10 font-bold text-gray-800">Login</h1>
+        <section>
+            <form id="account" method="post" class="space-y-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div>
+                    <label class="block tracking-wide text-grey-darker text-lg font-bold mb-2" for="email">
+                        Email
+                    </label>
+                    <input asp-for="Input.Email" class="form-control w-full rounded-lg border-gray-100 border-2 p-3 text-lg bg-white" autocomplete="username" aria-required="true"/>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="pb-10">
+                    <label class="block tracking-wide text-grey-darker text-lg font-bold mb-2" for="password">
+                        Password
+                    </label>
+                    <input asp-for="Input.Password" class="form-control w-full rounded-lg border-gray-100 border-2 p-3 text-lg bg-white" autocomplete="current-password" aria-required="true"/>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                @* <div class="checkbox mb-3"> *@
+                @*     <label asp-for="Input.RememberMe" class="form-label"> *@
+                @*         <input class="form-check-input" asp-for="Input.RememberMe" /> *@
+                @*         @Html.DisplayNameFor(m => m.Input.RememberMe) *@
+                @*     </label> *@
+                @* </div> *@
+                <div class="flex w-full">
+                    <button
+                        class="w-full bg-gray-200 btn btn-lg btn-primary text-gray-600 hover:text-white hover:bg-pink-300 text-lg py-2 px-4 font-black rounded-xl focus:outline-none focus:shadow-outline h-16"
+                        id="login-submit"
+                        type="submit">
+                        LOGIN
+                    </button>
+                </div>
+                <div class="pt-5">
+                    <p class="text-center">
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="hover:text-pink-300">Still don't have an account? Sign up here.</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}
