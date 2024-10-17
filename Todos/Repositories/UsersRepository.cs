@@ -36,6 +36,9 @@ public class UsersRepository : IUsersRepository
         var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
         if (userEntity is null) throw new NotSupportedException();
         userEntity.Email = user.Email;
+        userEntity.NormalizedEmail = user.Email.ToUpper();
+        userEntity.UserName = user.Email;
+        userEntity.NormalizedUserName = user.Email.ToUpper();
         
         await _context.SaveChangesAsync();
     }

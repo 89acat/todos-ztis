@@ -52,6 +52,11 @@ public class ProfileController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(User user)
     {
+        if (string.IsNullOrEmpty(user.Email))
+        {
+            ModelState.AddModelError("Email", "Email is required.");
+            return View(user);
+        }
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         await _usersRepository.EditUser(userId, user);
         return Redirect("/profile/show");

@@ -41,6 +41,11 @@ public class NotesController : Controller
     [HttpPost]
     public async Task<IActionResult> Add(Note note)
     {
+        if (string.IsNullOrEmpty(note.Title))
+        {
+            ModelState.AddModelError("Title", "Title is required.");
+            return View(note);
+        }
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var noteId = await _repository.AddNote(userId, note);
         return Redirect($"/notes/show?id={noteId}");
@@ -58,6 +63,12 @@ public class NotesController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(Note note)
     {
+        if (string.IsNullOrEmpty(note.Title))
+        {
+            ModelState.AddModelError("Title", "Title is required.");
+            return View(note);
+        }
+        
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         await _repository.EditNote(userId, note);
         return Redirect($"/notes/show?id={note.Id}");
